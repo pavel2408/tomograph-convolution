@@ -37,6 +37,7 @@ class SliceLabel(QtWidgets.QLabel):
         self.set_slice()
 
     def set_slice(self):
+        self.__slices[self.slice_pointer] = self.__slices[self.slice_pointer].scaled(self.width()/1.25, self.height()/1.25, QtCore.Qt.AspectRatioMode.KeepAspectRatio)
         self.setPixmap(self.__slices[self.slice_pointer])
         self.__description_label.setText(self.description_text + f" ({self.slice_pointer+1} из {len(self.__slices)})")
 

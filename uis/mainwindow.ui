@@ -59,7 +59,10 @@
            <string/>
           </property>
           <property name="scaledContents">
-           <bool>true</bool>
+           <bool>false</bool>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
@@ -107,7 +110,10 @@
            <string/>
           </property>
           <property name="scaledContents">
-           <bool>true</bool>
+           <bool>false</bool>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
@@ -159,7 +165,10 @@
            <string/>
           </property>
           <property name="scaledContents">
-           <bool>true</bool>
+           <bool>false</bool>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
@@ -196,6 +205,7 @@
      <string>Меню</string>
     </property>
     <addaction name="action_open_dicom"/>
+    <addaction name="action_Analyze"/>
    </widget>
    <widget class="QMenu" name="view_menu">
     <property name="title">
@@ -205,13 +215,15 @@
     <addaction name="action_sync_with_first"/>
     <addaction name="action_sync_with_second"/>
     <addaction name="action_sync_with_third"/>
+    <addaction name="action_organs_info"/>
+    <addaction name="action_DICOM"/>
    </widget>
    <addaction name="main_menu"/>
    <addaction name="view_menu"/>
   </widget>
   <action name="action_open_dicom">
    <property name="text">
-    <string>Открыть папку DICOM-файлами</string>
+    <string>Открыть папку с DICOM-файлами</string>
    </property>
   </action>
   <action name="action_sync_with_first">
@@ -232,6 +244,24 @@
   <action name="action_reset_slices">
    <property name="text">
     <string>Сбросить срезы</string>
+   </property>
+  </action>
+  <action name="action_DICOM">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Информация о DICOM-файле</string>
+   </property>
+  </action>
+  <action name="action_Analyze">
+   <property name="text">
+    <string>Открыть Analyze-файл</string>
+   </property>
+  </action>
+  <action name="action_organs_info">
+   <property name="text">
+    <string>Информация об органах</string>
    </property>
   </action>
  </widget>

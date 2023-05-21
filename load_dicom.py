@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from PIL import ImageQt, Image
 import os
+from scipy.ndimage import median_filter
 
 def transform_to_hu(medical_image, image):
     intercept = medical_image.RescaleIntercept
@@ -49,6 +50,19 @@ def get_names_of_imgs_inside_folder(directory: str):
             names.append(filename)
     return names
 
+def get_metadata(source_dir: str):
+    # source_dir = 'C:\\Users\\Pavel\\Downloads\\1548. Mouse 21 (tumor). 100 mkl LaF3 RT. 2 w. DICOM'
+    o1 = 'o1'
+    o2 = 'o2'
+    o3 = 'o3'
+
+    # load the DICOM files
+    files = []
+
+    print('dir: {}'.format(source_dir))
+    fnames = get_names_of_imgs_inside_folder(source_dir)
+    dicom_metadata = pydicom.filereader.read_file_meta_info(source_dir + os.sep + fnames[0])
+    return str(dicom_metadata)
 
 def load_images_from_dicom(source_dir: str):
     # source_dir = 'C:\\Users\\Pavel\\Downloads\\1548. Mouse 21 (tumor). 100 mkl LaF3 RT. 2 w. DICOM'
@@ -97,18 +111,26 @@ def load_images_from_dicom(source_dir: str):
     for i, s in enumerate(slices):
         img2d = s.pixel_array
         img3d[:, :, i] = img2d
-
+    """
     images_o1 = list()
     for i in range(0, img_shape[2]):
         image = convert_to_rgb(img3d[:, :, i])
+        image = median_filter(image, 3)
         images_o1.append(image)
     images_o2 = list()
     for i in range(0, img_shape[1]):
         image = convert_to_rgb(img3d[:, i, :])
+        image = median_filter(image, 3)
         images_o2.append(image)
     images_o3 = list()
     for i in range(0, img_shape[0]):
         image = convert_to_rgb(img3d[i, :, :])
+        image = median_filter(image, 3)
         images_o3.append(image)
+    """
+    return img3d
 
-    return images_o1, images_o2, images_o3
+
+if __name__=="__main__":
+    a = get_metadata('C:\\Users\\Pavel\\Downloads\\1548. Mouse 21 (tumor). 100 mkl LaF3 RT. 2 w. DICOM')
+    print(a)
