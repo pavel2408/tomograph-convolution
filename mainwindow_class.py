@@ -3,6 +3,7 @@ import numpy as np
 from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtCore import QThread
+from PyQt5.QtWidgets import QMessageBox
 
 import load_dicom
 import uis.mainwindow as mainwindow
@@ -46,14 +47,32 @@ class MainWindow(QtWidgets.QMainWindow, mainwindow.Ui_MainWindow):
         self.action_Analyze.triggered.connect(self.load_analyze)
         self.action_DICOM.triggered.connect(self.show_metadata)
         self.action_organs_info.triggered.connect(self.show_organ_info)
+        self.action_check_cuda.triggered.connect(self.check_for_videocard)
         self.view_menu.menuAction().setVisible(False)
+
+    def check_for_videocard(self):
+        msg = QMessageBox(QMessageBox.Icon.Information, "Статус", "", parent=self)
+        try:
+            import torch.cuda as cuda
+        except Exception as e:
+            msg.setText("Отсутствует модуль pytorch")
+            msg.show()
+            return
+        if not cuda.is_available():
+            result_text = "Отсутствуют библиотеки CUDA"
+        elif cuda.device_count() < 1:
+            result_text = "Отсутствует видеокарта"
+        else:
+            result_text = f"Используемая видеокарта: {cuda.get_device_name(0)}"
+        msg.setText(result_text)
+        msg.show()
 
     def show_metadata(self):
         if self.meta_string != "":
             self.dicom_win.show()
         else:
-            msg_box = QtWidgets.QMessageBox(icon=QtWidgets.QMessageBox.Icon.Critical, title="Ошибка",
-                                            text="Не найдены данные для DICOM-файла")
+            msg_box = QMessageBox( QtWidgets.QMessageBox.Icon.Critical, "Ошибка",
+                                            "Не найдены данные для DICOM-файла", parent=self)
             msg_box.show()
 
     def show_organ_info(self):
