@@ -9,7 +9,7 @@ import load_dicom
 import uis.mainwindow as mainwindow
 from load_dicom import load_images_from_dicom
 from functools import partial
-from metrics import Recognizer
+from recognizer import Recognizer
 from uis.dicom_win_class import DicomWin
 from uis.organs_info_class import OrgansWin
 from uis.please_wait_class import PleaseWaitWin
@@ -71,7 +71,7 @@ class MainWindow(QtWidgets.QMainWindow, mainwindow.Ui_MainWindow):
         if self.meta_string != "":
             self.dicom_win.show()
         else:
-            msg_box = QMessageBox( QtWidgets.QMessageBox.Icon.Critical, "Ошибка",
+            msg_box = QMessageBox(QtWidgets.QMessageBox.Icon.Critical, "Ошибка",
                                             "Не найдены данные для DICOM-файла", parent=self)
             msg_box.show()
 
@@ -105,7 +105,7 @@ class MainWindow(QtWidgets.QMainWindow, mainwindow.Ui_MainWindow):
         self.third_view.setPixmap(self.third_view_images[self.third_view_pointer].scaled(self.third_view.size()))
 
     def load_analyze(self):
-        self.analyze_file_name, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Выберите папку с DICOM-файлами...",
+        self.analyze_file_name, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Выберите Analyze HDR файл...",
                                                                 filter="Analyze files(*.hdr)")
         if not self.analyze_file_name:
             return
@@ -133,6 +133,7 @@ class MainWindow(QtWidgets.QMainWindow, mainwindow.Ui_MainWindow):
 
     def load_analyze_finished(self):
         self.please_wait_win.hide()
+        self.properties = self.recognizer.property_string
         # print(self.second_view_images[self.second_view_pointer].size())
         self.first_view.slices = self.recognizer.ax_images
         self.second_view.slices = self.recognizer.cor_images
@@ -176,6 +177,7 @@ class MainWindow(QtWidgets.QMainWindow, mainwindow.Ui_MainWindow):
 
     def load_dicom_finished(self):
         self.please_wait_win.hide()
+        self.properties = self.recognizer.property_string
         self.first_view.slices = self.recognizer.ax_images
         self.second_view.slices = self.recognizer.cor_images
         self.third_view.slices = self.recognizer.cag_images

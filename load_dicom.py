@@ -129,8 +129,3 @@ def load_images_from_dicom(source_dir: str):
         images_o3.append(image)
     """
     return img3d
-
-
-if __name__=="__main__":
-    a = get_metadata('C:\\Users\\Pavel\\Downloads\\1548. Mouse 21 (tumor). 100 mkl LaF3 RT. 2 w. DICOM')
-    print(a)
