@@ -206,6 +206,10 @@
     </property>
     <addaction name="action_open_dicom"/>
     <addaction name="action_Analyze"/>
+    <addaction name="separator"/>
+    <addaction name="open_history_action"/>
+    <addaction name="save_history_action"/>
+    <addaction name="load_history_from_images_action"/>
    </widget>
    <widget class="QMenu" name="view_menu">
     <property name="title">
@@ -274,6 +278,21 @@
   <action name="action_check_cuda">
    <property name="text">
     <string>Проверить наличие CUDA и GPU</string>
+   </property>
+  </action>
+  <action name="open_history_action">
+   <property name="text">
+    <string>История пациентов</string>
+   </property>
+  </action>
+  <action name="save_history_action">
+   <property name="text">
+    <string>Сохранить значения...</string>
+   </property>
+  </action>
+  <action name="load_history_from_images_action">
+   <property name="text">
+    <string>Сохранить снимки в историю...</string>
    </property>
   </action>
  </widget>

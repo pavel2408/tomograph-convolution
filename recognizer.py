@@ -13,17 +13,27 @@ from PIL import ImageQt, Image
 import cv2
 
 
+class Label:
+    def __init__(self, class_index):
+        self.class_index = class_index
+        self.points = list()
+
+
+class ClassProperty:
+    def __init__(self, class_name, volume, intensity):
+        self.class_name = class_name
+        self.volume = volume
+        self.intensity = intensity
+
+    def __repr__(self):
+        return f"{self.class_name}: {self.volume}, {self.intensity}"
+
+
 def convert_to_qt(img: np.array):
     h, w, ch = img.shape
     bytesPerLine = ch * w
     toQt = QPixmap(QImage(img.data, w, h, bytesPerLine, QImage.Format_RGB888))
     return toQt
-
-
-class Label:
-    def __init__(self, class_index):
-        self.class_index = class_index
-        self.points = list()
 
 
 class Recognizer(QObject):
@@ -33,6 +43,7 @@ class Recognizer(QObject):
 
     def __init__(self, ct_path, ct_type):
         super(Recognizer, self).__init__()
+        self.class_properties = []
         self.cag_images = None
         self.cor_images = None
         self.property_string = None
@@ -247,6 +258,7 @@ class Recognizer(QObject):
         self.apply_labels(data.transpose(0, 1, 2, 3), self.cag_labels)
         self.property_string = ""
         self.switch_task_count.emit(len(self.class_names))
+        self.class_properties = []
         for i in range(len(self.class_names)):
             self.progress.emit(f"Расчитываю объём для класса {self.class_names[i]}...", i+1)
             self.property_string += f'{self.class_names[i]}:\n'
@@ -271,4 +283,6 @@ class Recognizer(QObject):
             except:
                 intensity_avg = 0
             self.property_string += f'\tintensity_avg = {round(intensity_avg, 2)}HU\n'
+            self.class_properties.append(ClassProperty(self.class_names[i], volume, intensity_avg))
+        print(self.class_properties)
         self.finished.emit()
